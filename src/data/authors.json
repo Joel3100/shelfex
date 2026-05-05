@@ -1,0 +1,44 @@
+[
+  {
+    "id": "author-1",
+    "name": "John Calvin",
+    "bio": "A central figure of the Protestant Reformation, Calvin was a pastor, theologian, and reformer based mainly in Geneva. He systematized Reformed theology in his famous Institutes of the Christian Religion.",
+    "nationality": "French"
+  },
+  {
+    "id": "author-2",
+    "name": "Herman Bavinck",
+    "bio": "One of the greatest Reformed theologians of the modern era, Bavinck combined deep orthodoxy with intellectual engagement with modern philosophy and culture.",
+    "nationality": "Dutch"
+  },
+  {
+    "id": "author-3",
+    "name": "Louis Berkhof",
+    "bio": "A systematic theologian known for making Reformed theology clear, organized, and accessible. He taught at Calvin Theological Seminary.",
+    "nationality": "Dutch-American"
+  },
+  {
+    "id": "author-4",
+    "name": "Geerhardus Johannes Vos",
+    "bio": "A pioneer of biblical theology, Vos emphasized the progressive unfolding of God's revelation in Scripture and its Christ-centered focus.",
+    "nationality": "Dutch-American"
+  },
+  {
+    "id": "author-5",
+    "name": "John Owen",
+    "bio": "A prominent Puritan theologian and pastor, Owen is known for his writings on sanctification, the Trinity, and the nature of sin.",
+    "nationality": "English"
+  },
+  {
+    "id": "author-6",
+    "name": "John Charles Ryle",
+    "bio": "An evangelical Anglican bishop known for clear, practical, and pastoral writing accessible to ordinary Christians.",
+    "nationality": "English"
+  },
+  {
+    "id": "author-7",
+    "name": "R.C. Sproul",
+    "bio": "A modern Reformed theologian, teacher, and founder of Ligonier Ministries. Known for making deep theology understandable.",
+    "nationality": "American"
+  }
+]
