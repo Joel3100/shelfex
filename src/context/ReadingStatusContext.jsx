@@ -1,7 +1,10 @@
 import { createContext, useContext, useState } from "react";
 
 // 1. CREATE the context
-const ReadingStatusContext = createContext();
+const ReadingStatusContext = createContext({
+  statuses: {},
+  updateStatus: () => {},
+});
 
 // 2. BUILD the Provider component
 export function ReadingStatusProvider({ children }) {
