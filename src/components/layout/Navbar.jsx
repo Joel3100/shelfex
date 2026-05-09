@@ -66,13 +66,6 @@ export default function Navbar() {
             >
               ✉️ Contact
             </Link>
-            <Link
-              to="/signup"
-              onClick={() => setIsOpen(false)}
-              className="block px-4 py-2 text-gray-900 hover:text-gray-400"
-            >
-              👤 Sign Up
-            </Link>
           </div>
         )}
       </div>

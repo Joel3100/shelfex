@@ -26,7 +26,7 @@ export default function LibraryPage() {
         setIsLoading(false);
       })
       .catch((err) => {
-        setError("Faild to load books.");
+        setError("Failed to load books.");
         setIsLoading(false);
       });
   }, []);
