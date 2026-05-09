@@ -1,23 +1,30 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import logo from "./../assets/shelfex.png";
-import bgImage1 from "./../assets/library-bg1.jpeg";
-import bgImage2 from "./../assets/library-bg2.jpg";
-import bgImage3 from "./../assets/library-bg3.jpg";
+import bg1 from "./../assets/library-bg1.jpeg";
+import bg2 from "./../assets/library-bg2.jpg";
+import bg3 from "./../assets/library-bg3.jpg";
 import books from "./../data/authors.json";
 
 export default function LandingPage() {
-  const images = [bgImage1, bgImage2, bgImage3];
+  const images = [bg1, bg2, bg3];
   const [current, setCurrent] = useState(0);
 
+  // Preloading all images once on mount to ensure smooth transitions
+  useEffect(() => {
+    images.forEach((src) => {
+      const img = new Image();
+      img.src = src;
+    });
+  }, []);
+
+  // Slidehow interval every 4 seconds
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrent((prev) => (prev + 1) % images.length);
     }, 4000);
     return () => clearInterval(interval);
   }, []);
-
-  const featuredBooks = books.slice(0, 3);
 
   return (
     <div
@@ -26,7 +33,7 @@ export default function LandingPage() {
         backgroundImage: `linear-gradient(rgba(15,23,42,0.65), rgba(15,23,42,0.75)), url(${images[current]})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
-        transition: "background-image 1s ease-in-out",
+        transition: "background-image 0.8s ease-in-out",
       }}
     >
       {/* Navbar */}
