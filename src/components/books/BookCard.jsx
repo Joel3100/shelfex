@@ -55,18 +55,20 @@ export default function BookCard({ book, authors }) {
         </div>
 
         {/* Book Info */}
-        <div className="p-4 ">
-          <h3 className="font-bold text-gray-900">{book.title}</h3>
-          <p className="flex justify-between text-sm text-gray-500 truncate item-center">
+        <div className="p-3">
+          <h3 className="mb-1 text-sm font-bold leading-tight text-gray-900 line-clamp-2">
+            {book.title}
+          </h3>
+          <p className="text-sm text-gray-500 truncate">
             <Link
               to={`/author/${author.id}`}
               onClick={(e) => e.stopPropagation()}
               className="text-sm text-gray-500 hover:text-gray-600 hover:underline"
             >
               {author.name}
-            </Link>{" "}
-            <span>⭐ {book.rating}</span>
+            </Link>
           </p>
+          <p>⭐ {book.rating}</p>
         </div>
       </div>
     </Link>

@@ -1,5 +1,8 @@
 import Navbar from "../components/layout/Navbar";
 import Footer from "../components/layout/Footer";
+import booksData from "../data/books.json";
+import authorsData from "../data/authors.json";
+import categoriesData from "../data/categories.json";
 
 export default function AboutPage() {
   return (
@@ -62,15 +65,21 @@ export default function AboutPage() {
         <div className="p-10 text-center bg-slate-900 rounded-2xl">
           <div className="flex justify-center gap-16">
             <div>
-              <p className="text-4xl font-bold text-white">15</p>
+              <p className="text-4xl font-bold text-white">
+                {booksData.length}
+              </p>
               <p className="mt-1 text-slate-400">Books</p>
             </div>
             <div>
-              <p className="text-4xl font-bold text-white">7</p>
+              <p className="text-4xl font-bold text-white">
+                {authorsData.length}
+              </p>
               <p className="mt-1 text-slate-400">Authors</p>
             </div>
             <div>
-              <p className="text-4xl font-bold text-white">4</p>
+              <p className="text-4xl font-bold text-white">
+                {categoriesData.length}
+              </p>
               <p className="mt-1 text-slate-400">Categories</p>
             </div>
           </div>

@@ -12,7 +12,7 @@ export default function BookGrid({ books, authors, className }) {
   return (
     <div
       className={
-        className || "grid grid-cols-3 gap-6 p-6 md:grid-cols-4 lg:grid-cols-6"
+        className || "grid grid-cols-2 gap-4 p-4 md:grid-cols-3 lg:grid-cols-5"
       }
     >
       {books.map((book) => (
