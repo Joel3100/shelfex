@@ -2,7 +2,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ReadingStatusProvider } from "./context/ReadingStatusContext";
 import LibraryPage from "./pages/LibraryPage";
 import BookDetailPage from "./pages/BookDetailPage";
-import Navbar from "./components/layout/Navbar";
 import AuthorPage from "./pages/AuthorPage";
 import LandingPage from "./pages/LandingPage";
 import AboutPage from "./pages/AboutPage";

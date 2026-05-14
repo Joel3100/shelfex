@@ -37,13 +37,14 @@ export default function LandingPage() {
       }}
     >
       {/* Navbar */}
-      <nav className="flex items-center justify-between px-4 py-4 md:px-10">
+      <nav className="flex items-center justify-between px-4 py-4 md:px-10 bg-slate-900">
         <Link to="/library" className="flex items-center gap-2">
-          <img
+          {/* <img
             src={logo}
             alt="Shelfex"
             className="object-contain h-7 w-7 mix-blend-screen"
           />
+          */}
           <span className="text-lg font-bold text-white">Shelfex</span>
         </Link>
 
@@ -69,10 +70,10 @@ export default function LandingPage() {
         {/* Mobile — just show Library button */}
         <div className="flex items-center gap-3 md:hidden">
           <Link
-            to="/library"
+            to="/signup"
             className="px-4 py-2 text-sm text-white bg-blue-600 rounded-full"
           >
-            Library
+            Register
           </Link>
         </div>
       </nav>
