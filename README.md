@@ -36,11 +36,17 @@ The app will run at `http://localhost:5173`.
 
 ## Screenshots
 
-> _Add screenshots here_
+### Home Page
+
+![Home Page](./Screenshots/Screenshot 2026-04-27 171542.png)
+![Home Page](./Screenshots/Screenshot 2026-04-27 171529.png>)
+![Home Page](<public/Screenshots/Screenshot 2026-04-27 171248.png>)
+
 
 ## Author
 
 **Eyuel Alemu (Joel3100)**
+
 - GitHub: [@Joel3100](https://github.com/Joel3100)
 
 ## License
