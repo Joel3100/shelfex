@@ -90,7 +90,7 @@ export default function LibraryPage() {
         <p className="mt-1 text-slate-400">
           Browse {books.length} books from the Reformed Tradition and Theology.
         </p>
-        <div className="flex gap-4 mt-4">
+        <div className="flex flex-col gap-3 mt-4 md:flex-row md:items-center">
           <SearchBar value={searchQuery} onChange={setSearchQuery} />
           <FilterBar
             categories={categories}
