@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import { useReadingStatus } from "../../context/ReadingStatusContext";
-import { getAuthor } from "../../utils/bookHelpers";
 import { useEffect, useState } from "react";
 
 const STATUS_STYLES = {
@@ -16,15 +15,22 @@ const STATUS_LABELS = {
 };
 
 export default function BookCard({ book, authors }) {
-  const author = getAuthor(book, authors);
+  const authorName =
+    book.author_name ||
+    authors?.find((a) => a.id === book.author_id)?.name ||
+    "Unknown Author";
   const { statuses } = useReadingStatus();
   const currentStatus = statuses[book.id];
   const [coverUrl, setCoverUrl] = useState(null);
 
   useEffect(() => {
-    const title = encodeURIComponent(book.title);
-    const url = `https://covers.openlibrary.org/b/title/${title}-M.jpg`;
-    setCoverUrl(url);
+    if (book.isbn) {
+      setCoverUrl(`https://covers.openlibrary.org/b/isbn/${book.isbn}-M.jpg`);
+    } else {
+      setCoverUrl(
+        `https://covers.openlibrary.org/b/title/${encodeURIComponent(book.title)}-M.jpg`,
+      );
+    }
   }, [book.id]);
 
   return (
@@ -59,15 +65,7 @@ export default function BookCard({ book, authors }) {
           <h3 className="mb-1 text-sm font-bold leading-tight text-gray-900 line-clamp-2">
             {book.title}
           </h3>
-          <p className="text-sm text-gray-500 truncate">
-            <Link
-              to={`/author/${author.id}`}
-              onClick={(e) => e.stopPropagation()}
-              className="text-sm text-gray-500 hover:text-gray-600 hover:underline"
-            >
-              {author.name}
-            </Link>
-          </p>
+          <p className="text-sm text-gray-500 truncate">{authorName}</p>
           <p>⭐ {book.rating}</p>
         </div>
       </div>

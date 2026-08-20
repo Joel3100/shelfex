@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { getBooks, getAuthors, getCategories } from "../services/api";
 import logo from "./../assets/shelfex.png";
 import bg1 from "./../assets/library-bg1.jpeg";
 import bg2 from "./../assets/library-bg2.jpg";
@@ -8,6 +9,11 @@ import bg3 from "./../assets/library-bg3.jpg";
 export default function LandingPage() {
   const images = [bg1, bg2, bg3];
   const [current, setCurrent] = useState(0);
+  const [stats, setStats] = useState({
+    books: 0,
+    authors: 0,
+    categories: 0,
+  });
 
   // Preloading all images once on mount to ensure smooth transitions
   useEffect(() => {
@@ -23,6 +29,26 @@ export default function LandingPage() {
       setCurrent((prev) => (prev + 1) % images.length);
     }, 4000);
     return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    async function loadStats() {
+      try {
+        const [booksRes, authorsRes, categoriesRes] = await Promise.all([
+          getBooks(),
+          getAuthors(),
+          getCategories(),
+        ]);
+        setStats({
+          books: booksRes.data.length,
+          authors: authorsRes.data.length,
+          categories: categoriesRes.data.length,
+        });
+      } catch (err) {
+        // Keep default 0 values if API fails
+      }
+    }
+    loadStats();
   }, []);
 
   return (
@@ -77,7 +103,6 @@ export default function LandingPage() {
           </Link>
         </div>
       </nav>
-
       {/* Hero Content */}
       <div className="flex flex-col items-start justify-center flex-1 px-6 py-8 md:px-16">
         {/* Badge */}
@@ -128,7 +153,27 @@ export default function LandingPage() {
           </Link>
         </div>
       </div>
-
+      <div className="flex gap-8 text-sm text-slate-400">
+        <div>
+          <p className="text-2xl font-bold text-white md:text-3xl">
+            {stats.books}
+          </p>
+          <p>Books</p>
+        </div>
+        <div>
+          <p className="text-2xl font-bold text-white md:text-3xl">
+            {stats.authors}
+          </p>
+          <p>Authors</p>
+        </div>
+        <div>
+          <p className="text-2xl font-bold text-white md:text-3xl">
+            {stats.categories}
+          </p>
+          <p>Categories</p>
+        </div>
+      </div>
+      Why
       {/* Carousel Indicators */}
       <div className="flex justify-center gap-2 mt-4 mb-3">
         {images.map((_, index) => (

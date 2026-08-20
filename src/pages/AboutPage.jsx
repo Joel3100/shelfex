@@ -1,10 +1,36 @@
+import { useEffect, useState } from "react";
 import Navbar from "../components/layout/Navbar";
 import Footer from "../components/layout/Footer";
-import booksData from "../data/books.json";
-import authorsData from "../data/authors.json";
-import categoriesData from "../data/categories.json";
+import { getAuthors, getBooks, getCategories } from "../services/api";
 
 export default function AboutPage() {
+  const [stats, setStats] = useState({
+    books: 0,
+    authors: 0,
+    categories: 0,
+  });
+
+  useEffect(() => {
+    async function loadStats() {
+      try {
+        const [booksRes, authorsRes, categoriesRes] = await Promise.all([
+          getBooks(),
+          getAuthors(),
+          getCategories(),
+        ]);
+        setStats({
+          books: booksRes.data.length,
+          authors: authorsRes.data.length,
+          categories: categoriesRes.data.length,
+        });
+      } catch {
+        // Keep default 0 values if API fails
+      }
+    }
+
+    loadStats();
+  }, []);
+
   return (
     <div className="min-h-screen bg-gray-100">
       <Navbar />
@@ -41,14 +67,14 @@ export default function AboutPage() {
               <p className="mb-3 text-4xl">📚</p>
               <h3 className="mb-2 font-bold text-gray-900">Curated Books</h3>
               <p className="text-sm text-gray-500">
-                15 carefully selected books from Reformed tradition
+                {stats.books} carefully selected books from Reformed tradition
               </p>
             </div>
             <div className="p-4 text-center">
               <p className="mb-3 text-4xl">✍️</p>
               <h3 className="mb-2 font-bold text-gray-900">Author Profiles</h3>
               <p className="text-sm text-gray-500">
-                Learn about 7 influential Reformed theologians
+                Learn about {stats.authors} influential Reformed theologians
               </p>
             </div>
             <div className="p-4 text-center">
@@ -65,20 +91,16 @@ export default function AboutPage() {
         <div className="p-10 text-center bg-slate-900 rounded-2xl">
           <div className="flex justify-center gap-16">
             <div>
-              <p className="text-4xl font-bold text-white">
-                {booksData.length}
-              </p>
+              <p className="text-4xl font-bold text-white">{stats.books}</p>
               <p className="mt-1 text-slate-400">Books</p>
             </div>
             <div>
-              <p className="text-4xl font-bold text-white">
-                {authorsData.length}
-              </p>
+              <p className="text-4xl font-bold text-white">{stats.authors}</p>
               <p className="mt-1 text-slate-400">Authors</p>
             </div>
             <div>
               <p className="text-4xl font-bold text-white">
-                {categoriesData.length}
+                {stats.categories}
               </p>
               <p className="mt-1 text-slate-400">Categories</p>
             </div>

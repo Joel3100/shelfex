@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
-import booksData from "../data/books.json";
-import authors from "../data/authors.json";
-import categories from "../data/categories.json";
+import { getBooks, getAuthors, getCategories } from "../services/api";
 import FilterBar from "../components/ui/FilterBar";
 import BookGrid from "../components/books/BookGrid";
 import SearchBar from "../components/ui/SearchBar";
@@ -9,71 +7,57 @@ import Navbar from "../components/layout/Navbar";
 import Footer from "../components/layout/Footer";
 
 export default function LibraryPage() {
+  const [books, setBooks] = useState([]);
+  const [authors, setAuthors] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedAuthor, setSelectedAuthor] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
 
-  const [books, setBooks] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  /*
   useEffect(() => {
-    fetch("https://openlibrary.org/search.json?q=reformed+theology&limit=15")
-      .then((response) => response.json)
-      .then((data) => {
-        setBooks(data.docs);
-        setIsLoading(false);
-      })
-      .catch((err) => {
-        setError("Failed to load books.");
-        setIsLoading(false);
-      });
-  }, []);
-  */
-
-  useEffect(() => {
-    async function loadBooks() {
+    async function loadData() {
       try {
         setIsLoading(true);
-        await new Promise((resolve) => setTimeout(resolve, 800));
-        setBooks(booksData);
+        const [booksRes, authorsRes, categoriesRes] = await Promise.all([
+          getBooks(),
+          getAuthors(),
+          getCategories(),
+        ])
+        setBooks(booksRes.data);
+        setAuthors(authorsRes.data);
+        setCategories(categoriesRes.data);
         setIsLoading(false);
-      } catch (err) {
-        setError("Faild to load books.");
+      } catch {
+        setError("Failed to load library");
         setIsLoading(false);
       }
     }
-    loadBooks();
+    loadData();
   }, []);
 
   const filteredBooks = books.filter((book) => {
     const matchesCategory =
-      !selectedCategory || book.categoryIds.includes(selectedCategory);
-    const matchesAuthor = !selectedAuthor || book.authorId === selectedAuthor;
+      !selectedCategory || book.category_ids?.includes(selectedCategory);
+    const matchesAuthor = !selectedAuthor || book.author_id === selectedAuthor;
     const matchesSearch =
       !searchQuery ||
       book.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      authors
-        .find((author) => author.id === book.authorId)
-        ?.name.toLowerCase()
-        .includes(searchQuery.toLowerCase());
-
+      book.author_name?.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesCategory && matchesAuthor && matchesSearch;
   });
 
-  // Spinner JSX
   if (isLoading)
     return (
       <div className="flex items-center justify-center min-h-screen bg-gray-100">
         <div className="text-center">
-          <div className="w-12 h-12 mx-auto mb-4 border-4 rounded-full border-t-transparent animate-spin border-slate-900"></div>
-          <p className="text-gray-500 ">Loading library ...</p>
+          <div className="w-12 h-12 mx-auto mb-4 border-4 rounded-full border-slate-900 border-t-transparent animate-spin"></div>
+          <p className="text-gray-500">Loading library...</p>
         </div>
       </div>
     );
 
-  // error JSX
   if (error)
     return (
       <div className="flex items-center justify-center min-h-screen bg-gray-100">
@@ -81,16 +65,15 @@ export default function LibraryPage() {
       </div>
     );
 
-  // Normal Page JSX
   return (
-    <>
+    <div className="min-h-screen bg-gray-100">
       <Navbar />
-      <div className="px-6 py-8 bg-white border-slate-900 border-t-4- gray-200 border-">
+      <div className="px-6 py-8 bg-white border-t-4 border-slate-900">
         <h1 className="text-3xl font-bold text-gray-900">Reformed Library</h1>
         <p className="mt-1 text-slate-400">
-          Browse {books.length} books from the Reformed Tradition and Theology.
+          Browse {books.length} books from the Reformed Tradition
         </p>
-        <div className="flex flex-col gap-3 mt-4 md:flex-row md:items-center">
+        <div className="flex flex-col gap-3 mt-4 md:flex-row">
           <SearchBar value={searchQuery} onChange={setSearchQuery} />
           <FilterBar
             categories={categories}
@@ -101,10 +84,9 @@ export default function LibraryPage() {
             onAuthorChange={setSelectedAuthor}
           />
         </div>
-
-        <BookGrid books={filteredBooks} authors={authors} />
       </div>
+      <BookGrid books={filteredBooks} authors={authors} />
       <Footer />
-    </>
+    </div>
   );
 }

@@ -1,21 +1,52 @@
-import { useParams, useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
-import { getAuthor, getCategories } from "../utils/bookHelpers";
-import books from "../data/books.json";
-import authors from "../data/authors.json";
-import categories from "../data/categories.json";
+import { useState, useEffect } from "react";
+import { useParams, useNavigate, Link } from "react-router-dom";
+import { getBook } from "../services/api";
 import ReadingStatusSelector from "../components/books/ReadingStatusSelector";
 import Badge from "../components/ui/Badge";
 import Navbar from "../components/layout/Navbar";
-import Footer from "../components/layout/Navbar";
+import Footer from "../components/layout/Footer";
 
 export default function BookDetailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const book = books.find((b) => b.id === id);
-  const author = getAuthor(book, authors);
-  const bookCategories = getCategories(book, categories);
+  const [book, setBook] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    async function loadBook() {
+      try {
+        setIsLoading(true);
+        const response = await getBook(id);
+        setBook(response.data);
+        setIsLoading(false);
+      } catch (err) {
+        setError("Failed to load book details.");
+        setIsLoading(false);
+      }
+    }
+    loadBook();
+  }, [id]);
+
+  if (isLoading)
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gray-100">
+        <div className="w-12 h-12 border-4 rounded-full border-slate-900 border-t-transparent animate-spin"></div>
+      </div>
+    );
+
+  if (error)
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gray-100">
+        <p className="text-red-500">{error}</p>
+      </div>
+    );
+    
+  if (!book) return null;
+
+  const authorName = book.author_name || "Unknown Author";
+  const bookCategories = book.categories || [];
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -37,7 +68,11 @@ export default function BookDetailPage() {
             <div className="w-full md:w-64 md:flex-shrink-0">
               <div className="w-48 mx-auto overflow-hidden bg-gray-200 shadow-md rounded-xl md:w-64 md:mx-0">
                 <img
-                  src={`https://covers.openlibrary.org/b/title/${encodeURIComponent(book.title)}-L.jpg`}
+                  src={
+                    book.isbn
+                      ? `https://covers.openlibrary.org/b/isbn/${book.isbn}-L.jpg`
+                      : `https://covers.openlibrary.org/b/title/${encodeURIComponent(book.title)}-L.jpg`
+                  }
                   alt={book.title}
                   className="object-cover w-full h-64 md:h-80"
                   onError={(e) => {
@@ -54,10 +89,10 @@ export default function BookDetailPage() {
               </h1>
               <p className="mb-4 text-sm text-gray-500 md:text-base">
                 <Link
-                  to={`/author/${author.id}`}
+                  to={`/author/${book.author_id}`}
                   className="text-sm text-gray-500 hover:text-gray-600 hover:underline"
                 >
-                  {author.name}
+                  {authorName}
                 </Link>
               </p>
               <p className="mb-6 text-sm leading-relaxed text-gray-700 md:text-base">
@@ -66,8 +101,8 @@ export default function BookDetailPage() {
 
               {/* Details Row */}
               <div className="flex flex-wrap gap-8 p-4 mb-6 text-xs text-gray-500 md:text-sm bg-gray-50 rounded-xl">
-                <span>📅 {book.publishedYear} A.D</span>
-                <span>📄 {book.pageCount} Pages</span>
+                <span>📅 {book.published_year} A.D</span>
+                <span>📄 {book.page_count} Pages</span>
                 <span>🌐 {book.language}</span>
                 <span>⭐ {book.rating}</span>
               </div>
