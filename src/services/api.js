@@ -26,7 +26,6 @@ async function request(endpoint, options = {}) {
 // Books
 export const getBooks = () => request('/api/books')
 export const getBook = (id) => request(`/api/books/${id}`)
-export const getBookById = (id) => request(`/api/books/${id}`)
 
 // Authors
 export const getAuthors = () => request('/api/authors')

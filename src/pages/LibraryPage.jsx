@@ -24,7 +24,7 @@ export default function LibraryPage() {
           getBooks(),
           getAuthors(),
           getCategories(),
-        ])
+        ]);
         setBooks(booksRes.data);
         setAuthors(authorsRes.data);
         setCategories(categoriesRes.data);
@@ -68,21 +68,29 @@ export default function LibraryPage() {
   return (
     <div className="min-h-screen bg-gray-100">
       <Navbar />
-      <div className="px-6 py-8 bg-white border-t-4 border-slate-900">
-        <h1 className="text-3xl font-bold text-gray-900">Reformed Library</h1>
-        <p className="mt-1 text-slate-400">
+      <div className="px-4 py-6 bg-white border-t-4 border-slate-900 md:px-6">
+        <h1 className="text-2xl font-bold text-gray-900 md:text-3xl">
+          Reformed Library
+        </h1>
+        <p className="mt-1 text-sm text-slate-400 md:text-base">
           Browse {books.length} books from the Reformed Tradition
         </p>
-        <div className="flex flex-col gap-3 mt-4 md:flex-row">
-          <SearchBar value={searchQuery} onChange={setSearchQuery} />
-          <FilterBar
-            categories={categories}
-            authors={authors}
-            selectedCategory={selectedCategory}
-            selectedAuthor={selectedAuthor}
-            onCategoryChange={setSelectedCategory}
-            onAuthorChange={setSelectedAuthor}
-          />
+
+        {/* Search + Filter — stack on mobile */}
+        <div className="flex flex-col gap-3 mt-4 md:flex-row md:items-center">
+          <div className="w-full min-w-0 md:flex-1">
+            <SearchBar value={searchQuery} onChange={setSearchQuery} />
+          </div>
+          <div className="w-full min-w-0 md:w-auto">
+            <FilterBar
+              categories={categories}
+              authors={authors}
+              selectedCategory={selectedCategory}
+              selectedAuthor={selectedAuthor}
+              onCategoryChange={setSelectedCategory}
+              onAuthorChange={setSelectedAuthor}
+            />
+          </div>
         </div>
       </div>
       <BookGrid books={filteredBooks} authors={authors} />

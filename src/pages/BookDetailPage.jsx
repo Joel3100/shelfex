@@ -21,7 +21,7 @@ export default function BookDetailPage() {
         const response = await getBook(id);
         setBook(response.data);
         setIsLoading(false);
-      } catch (err) {
+      } catch {
         setError("Failed to load book details.");
         setIsLoading(false);
       }
@@ -42,11 +42,25 @@ export default function BookDetailPage() {
         <p className="text-red-500">{error}</p>
       </div>
     );
-    
+
   if (!book) return null;
 
   const authorName = book.author_name || "Unknown Author";
   const bookCategories = book.categories || [];
+  const apiBaseUrl = import.meta.env.VITE_API_URL || "http://localhost:5000";
+  const coverUrl = book.cover_file
+    ? `${apiBaseUrl}/api/books/${book.id}/cover`
+    : book.isbn
+      ? `https://covers.openlibrary.org/b/isbn/${book.isbn}-L.jpg`
+      : `https://covers.openlibrary.org/b/title/${encodeURIComponent(book.title)}-L.jpg`;
+
+  function stripHtml(html) {
+    if (!html) return "";
+    return html
+      .replace(/<[^>]*>/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
+  }
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -68,11 +82,7 @@ export default function BookDetailPage() {
             <div className="w-full md:w-64 md:flex-shrink-0">
               <div className="w-48 mx-auto overflow-hidden bg-gray-200 shadow-md rounded-xl md:w-64 md:mx-0">
                 <img
-                  src={
-                    book.isbn
-                      ? `https://covers.openlibrary.org/b/isbn/${book.isbn}-L.jpg`
-                      : `https://covers.openlibrary.org/b/title/${encodeURIComponent(book.title)}-L.jpg`
-                  }
+                  src={coverUrl}
                   alt={book.title}
                   className="object-cover w-full h-64 md:h-80"
                   onError={(e) => {
@@ -95,16 +105,18 @@ export default function BookDetailPage() {
                   {authorName}
                 </Link>
               </p>
-              <p className="mb-6 text-sm leading-relaxed text-gray-700 md:text-base">
-                {book.description}
+              <p className="leading-relaxed text-gray-700">
+                {stripHtml(book.description)}
               </p>
 
               {/* Details Row */}
-              <div className="flex flex-wrap gap-8 p-4 mb-6 text-xs text-gray-500 md:text-sm bg-gray-50 rounded-xl">
-                <span>📅 {book.published_year} A.D</span>
-                <span>📄 {book.page_count} Pages</span>
-                <span>🌐 {book.language}</span>
-                <span>⭐ {book.rating}</span>
+              <div className="flex flex-wrap gap-4 p-4 mb-6 text-xs text-gray-500 md:text-sm bg-gray-50 rounded-xl">
+                {book.published_year && (
+                  <span>📅 {book.published_year} A.D</span>
+                )}
+                {book.page_count && <span>📄 {book.page_count} Pages</span>}
+                {book.language && <span>🌐 {book.language}</span>}
+                {book.rating && <span>⭐ {book.rating}</span>}
               </div>
 
               {/* Categories */}
@@ -120,6 +132,18 @@ export default function BookDetailPage() {
 
               {/* Reading Status */}
               <ReadingStatusSelector bookId={book.id} />
+
+              {/* Download Button */}
+              {book.file_name && (
+                <div className="pt-6 mt-6 border-t border-gray-100">
+                  <a
+                    href={`http://localhost:5000/api/books/${book.id}/download`}
+                    className="inline-flex items-center gap-2 px-6 py-3 text-sm font-medium text-white transition rounded-full bg-slate-900 hover:bg-slate-800"
+                  >
+                    ⬇️ Download EPUB
+                  </a>
+                </div>
+              )}
             </div>
           </div>
         </div>

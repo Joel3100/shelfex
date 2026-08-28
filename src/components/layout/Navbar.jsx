@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
-import logo from "../../assets/shelfex.png";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);

@@ -20,7 +20,7 @@ export default function AuthorPage() {
         const response = await getAuthor(id);
         setAuthor(response.data);
         setIsLoading(false);
-      } catch (err) {
+      } catch {
         setError("Failed to load author details.");
         setIsLoading(false);
       }

@@ -24,14 +24,14 @@ export default function BookCard({ book, authors }) {
   const [coverUrl, setCoverUrl] = useState(null);
 
   useEffect(() => {
-    if (book.isbn) {
-      setCoverUrl(`https://covers.openlibrary.org/b/isbn/${book.isbn}-M.jpg`);
-    } else {
-      setCoverUrl(
-        `https://covers.openlibrary.org/b/title/${encodeURIComponent(book.title)}-M.jpg`,
-      );
-    }
-  }, [book.id]);
+  if (book.cover_file) {
+    setCoverUrl(`http://localhost:5000/api/books/${book.id}/cover`)
+  } else if (book.isbn) {
+    setCoverUrl(`https://covers.openlibrary.org/b/isbn/${book.isbn}-M.jpg`)
+  } else {
+    setCoverUrl(`https://covers.openlibrary.org/b/title/${encodeURIComponent(book.title)}-M.jpg`)
+  }
+}, [book.id])
 
   return (
     <Link to={`/book/${book.id}`}>

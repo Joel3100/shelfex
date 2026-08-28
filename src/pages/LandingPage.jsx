@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getBooks, getAuthors, getCategories } from "../services/api";
-import logo from "./../assets/shelfex.png";
 import bg1 from "./../assets/library-bg1.jpeg";
 import bg2 from "./../assets/library-bg2.jpg";
 import bg3 from "./../assets/library-bg3.jpg";
@@ -44,7 +43,7 @@ export default function LandingPage() {
           authors: authorsRes.data.length,
           categories: categoriesRes.data.length,
         });
-      } catch (err) {
+      } catch {
         // Keep default 0 values if API fails
       }
     }
@@ -152,28 +151,29 @@ export default function LandingPage() {
             Learn More
           </Link>
         </div>
+
+        <div className="flex gap-8 text-sm text-slate-400">
+          <div>
+            <p className="text-2xl font-bold text-white md:text-3xl">
+              {stats.books}
+            </p>
+            <p>Books</p>
+          </div>
+          <div>
+            <p className="text-2xl font-bold text-white md:text-3xl">
+              {stats.authors}
+            </p>
+            <p>Authors</p>
+          </div>
+          <div>
+            <p className="text-2xl font-bold text-white md:text-3xl">
+              {stats.categories}
+            </p>
+            <p>Categories</p>
+          </div>
+        </div>
       </div>
-      <div className="flex gap-8 text-sm text-slate-400">
-        <div>
-          <p className="text-2xl font-bold text-white md:text-3xl">
-            {stats.books}
-          </p>
-          <p>Books</p>
-        </div>
-        <div>
-          <p className="text-2xl font-bold text-white md:text-3xl">
-            {stats.authors}
-          </p>
-          <p>Authors</p>
-        </div>
-        <div>
-          <p className="text-2xl font-bold text-white md:text-3xl">
-            {stats.categories}
-          </p>
-          <p>Categories</p>
-        </div>
-      </div>
-      Why
+
       {/* Carousel Indicators */}
       <div className="flex justify-center gap-2 mt-4 mb-3">
         {images.map((_, index) => (
